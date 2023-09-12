@@ -4,8 +4,8 @@ NAME_B = pipex_bonus
 SRC			=	pipex.c
 OBJ			=	$(SRC:.c=.o)
 
-SRC_B		=	pipex_bonus.c
-OBJ_B		=	$(SRC_B:.c=.o)
+# SRC_B		=	pipex_bonus.c
+# OBJ_B		=	$(SRC_B:.c=.o)
 
 LIBFT		=	libft/libft.a
 
@@ -17,9 +17,9 @@ $(NAME): $(OBJ)
 		cd libft && make
 		$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
 
-bonus:	$(OBJ_B)
-		cd libft && make
-		$(CC) $(CFLAGS) $(SRC_B) $(LIBFT) -o $(NAME_B)
+# bonus:	$(OBJ_B)
+		# cd libft && make
+		# $(CC) $(CFLAGS) $(SRC_B) $(LIBFT) -o $(NAME_B)
 
 all:	$(NAME)
 

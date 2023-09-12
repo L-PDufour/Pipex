@@ -1,15 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldufour <ldufour@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/12 15:25:29 by ldufour           #+#    #+#             */
+/*   Updated: 2023/09/12 15:25:29 by ldufour          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft/libft.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define PROCESS_NUM (argc - 3)
-
-// 1ere etape Creer une string avec envp PATH et avec split use ft_strchr or ft_strncmp
 
 struct		s_Pipex
 {
@@ -37,14 +47,12 @@ int	path_verification(void)
 	char	*str;
 
 	i = 0;
-	printf("je suis dans path\n");
 	while (pipex.env_path[i] != NULL)
 	{
 		str = ft_strjoin(pipex.env_path[i], pipex.cmd_args[0]);
 		if (access(str, F_OK | X_OK) == 0)
 		{
 			pipex.cmd_path = ft_strdup(str);
-			printf("%s exist and is executable\n", pipex.cmd_path);
 			free(str);
 			return (0);
 		}
@@ -71,7 +79,6 @@ void	envp_path_creation(char **envp)
 			while (pipex.env_path[i] != NULL)
 			{
 				ft_strcat(pipex.env_path[i], "/");
-				printf("%s\n", pipex.env_path[i]);
 				i++;
 			}
 		}
@@ -79,93 +86,59 @@ void	envp_path_creation(char **envp)
 	}
 }
 
-// void	pipex(int fd1, int fd2)
-// {
-// 	int		fd[2];
-// 	pid_t	child1;
-// 	pid_t	child2;
-// 	else	child2_task;
-//
-// 	pipe(fd);
-// 	child1 = fork();
-// 	if (child1 < 0)
-// 		return (perror("Fork: "));
-// 	else
-// 		child1_task;
-// 	child2 = fork() if (child2 < 0) return (perror("Fork: "));
-// }
-
 int	main(int argc, char *argv[], char **envp)
 {
 	int		infile;
 	int		outfile;
 	char	**path;
-	int		pids[PROCESS_NUM];
-	int		pipes[PROCESS_NUM + 1][2];
-	int fd[2];
+	int		pids1;
+	int		pids2;
+	int		fd[2];
 	int		i;
 	int		j;
 	int		status;
 
-	// if (argc < 5)
-		// return (-1);
+	if (argc < 5)
+		exit (EXIT_FAILURE);
 	infile = open(argv[1], O_RDONLY);
 	outfile = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (infile < 0 || outfile < 0)
 	{
 		perror("Error with file");
-		return (errno);
+		exit(EXIT_FAILURE);
 	}
 	path = NULL;
 	envp_path_creation(envp);
-	// i = 0;
-	// while (i < PROCESS_NUM + 1)
-	// {
-	// 	if (pipe(pipes[i]) == -1)
-	// 	{
-	// 		perror("Problem with pipes");
-	// 		return (1);
-	// 	}
-	// 	printf("pipes[%d] created\n", i);
-	// 	i++;
-	// }
-	i = 0;
 	pipe(fd);
-	while (i < PROCESS_NUM)
+	pids1 = fork();
+	pids2 = fork();
+	if (pids1 == -1 || pids2 == -1 )
 	{
-		pids[i] = fork();
-		printf("fork[%d]\n", i);
-		if (pids[i] == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		if (pids[i] == 0)
-		{ 
-			close(fd[0]);
-
-			dup2(fd[1], STDIN_FILENO);
-			pipex.cmd_args = ft_split(argv[i + 2], ' ');
-			path_verification();
-			close(infile);
-			execve(pipex.cmd_path, pipex.cmd_args, envp);
-			return (0); // don't forget to exit the child process
-		}
-		else {
-			close(fd[1]);
-			dup2(fd[0], STDOUT_FILENO);
-			waitpid(pids[i], NULL, 0);
-		}
-		// printf("fork[%d]", i);
-		i++;
+		ft_putstr_fd("Error", STDERR_FILENO);
+		perror("fork");
+		exit(EXIT_FAILURE);
 	}
-	close(pipes[0][1]);
-	close(pipes[PROCESS_NUM + 1][0]);
-	for (i = 0; i < PROCESS_NUM; i++)
+	if (pids1 == 0)
 	{
-		waitpid(pids[i], &status, 0);
-		// printf("Child process %d (PID: %d) exited with status %d\n", i,
-		// WEXITSTATUS(status));
+		dup2(infile, STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		close(infile);
+		pipex.cmd_args = ft_split(argv[2], ' ');
+		path_verification();
+		execve(pipex.cmd_path, pipex.cmd_args, envp);
+		return (0); // don't forget to exit the child process
+	}
+	if (pids2 == 0)
+	{
+		waitpid(-1, &status, 0);
+		dup2(outfile, STDOUT_FILENO);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[1]);
+		close(outfile);
+		pipex.cmd_args = ft_split(argv[3], ' ');
+		path_verification();
+		execve(pipex.cmd_path, pipex.cmd_args, envp);
 	}
 	free_double_array(pipex.env_path);
 	free(pipex.cmd_path);
