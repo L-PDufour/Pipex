@@ -6,7 +6,7 @@
 /*   By: ldufour <ldufour@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 15:25:29 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/12 15:25:29 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/09/13 15:58:56 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
 
 struct		s_Pipex
 {
@@ -86,20 +85,43 @@ void	envp_path_creation(char **envp)
 	}
 }
 
-int	main(int argc, char *argv[], char **envp)
+void	error_handling(int function)
 {
-	int		infile;
-	int		outfile;
-	char	**path;
-	int		pids1;
-	int		pids2;
-	int		fd[2];
-	int		i;
-	int		j;
-	int		status;
+	if (function == -1)
+	{
+		exit(EXIT_FAILURE);
+	}
+}
 
-	if (argc < 5)
-		exit (EXIT_FAILURE);
+void	child_process_1(int infile, int fd[], char **argv, char **envp)
+{
+	error_handling(dup2(infile, STDIN_FILENO));
+	error_handling(dup2(fd[1], STDOUT_FILENO));
+	error_handling(close(fd[0]));
+	close(infile);
+	pipex.cmd_args = ft_split(argv[2], ' ');
+	path_verification();
+	execve(pipex.cmd_path, pipex.cmd_args, envp);
+	exit(EXIT_FAILURE);
+}
+
+void	child_process_2(int outfile, int fd[], char **argv, char **envp)
+{
+	int	status;
+
+	waitpid(-1, &status, 0);
+	dup2(outfile, STDOUT_FILENO);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[1]);
+	close(outfile);
+	pipex.cmd_args = ft_split(argv[3], ' ');
+	path_verification();
+	execve(pipex.cmd_path, pipex.cmd_args, envp);
+	exit(EXIT_FAILURE);
+}
+
+void	file_creation(int infile, int outfile, char **argv)
+{
 	infile = open(argv[1], O_RDONLY);
 	outfile = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (infile < 0 || outfile < 0)
@@ -107,49 +129,44 @@ int	main(int argc, char *argv[], char **envp)
 		perror("Error with file");
 		exit(EXIT_FAILURE);
 	}
-	path = NULL;
+}
+
+int	main(int argc, char *argv[], char **envp)
+{
+	int	infile;
+	int	outfile;
+	int	pids1;
+	int	pids2;
+	int	fd[2];
+
+	if (argc < 5)
+		exit(EXIT_FAILURE);
+	infile = open(argv[1], O_RDONLY);
+	outfile = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (infile < 0 || outfile < 0)
+	{
+		perror("Error with file");
+		exit(EXIT_FAILURE);
+	}
+	// file_creation(infile, outfile, argv);
 	envp_path_creation(envp);
 	pipe(fd);
 	pids1 = fork();
 	pids2 = fork();
-	if (pids1 == -1 || pids2 == -1 )
+	if (pids1 == -1 || pids2 == -1)
 	{
 		ft_putstr_fd("Error", STDERR_FILENO);
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
 	if (pids1 == 0)
-	{
-		dup2(infile, STDIN_FILENO);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[0]);
-		close(infile);
-		pipex.cmd_args = ft_split(argv[2], ' ');
-		path_verification();
-		execve(pipex.cmd_path, pipex.cmd_args, envp);
-		return (0); // don't forget to exit the child process
-	}
+		child_process_1(infile, fd, argv, envp);
 	if (pids2 == 0)
-	{
-		waitpid(-1, &status, 0);
-		dup2(outfile, STDOUT_FILENO);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[1]);
-		close(outfile);
-		pipex.cmd_args = ft_split(argv[3], ' ');
-		path_verification();
-		execve(pipex.cmd_path, pipex.cmd_args, envp);
-	}
+		child_process_2(outfile, fd, argv, envp);
 	free_double_array(pipex.env_path);
 	free(pipex.cmd_path);
+	fprintf(stderr, "error" );
 	return (0);
 }
 // TODO Commencer le pipe,
-// dup2 et execve,Je pourrais faire un fork et child 1 s'occupe de cmd1 et child 2 s'occupe de cmd2
-// execve(pipex.cmd1_path, pipex.cmd1_args, envp);
-// perror("exec");
-// printf("%s\n", argv[2]);
-// while (pipex.cmd1_args[++i] != NULL)
-// printf("%s\n", pipex.cmd1_args[i]);
-// Je pourrais avoir seulment une section path,
-// cmd qui est associé aux child processus.
+// Retester
