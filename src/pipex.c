@@ -6,11 +6,13 @@
 /*   By: ldufour <ldufour@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 15:25:29 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/17 20:27:54 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/09/18 14:23:41 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+
 
 void	child_process_1(char **argv)
 {
@@ -20,7 +22,7 @@ void	child_process_1(char **argv)
 	error_handling(close(pipex.infile), "Failed close");
 	pipex.cmd_args = ft_split(argv[2], ' ');
 	path_verification();
-	if(execve(pipex.cmd_path, pipex.cmd_args, NULL) == -1)
+	if (execve(pipex.cmd_path, pipex.cmd_args, NULL) == -1)
 		exit_pipex("Failed child procees 1");
 }
 
@@ -61,6 +63,7 @@ void	init_struct(void)
 
 int	main(int argc, char *argv[], char **envp)
 {
+
 	if (argc < 5)
 		exit_pipex("Invalid arguments");
 	init_struct();
