@@ -1,25 +1,31 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ldufour </var/spool/mail/ldufour>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/09/18 13:36:35 by ldufour           #+#    #+#              #
+#    Updated: 2023/09/18 14:03:13 by ldufour          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = pipex
 NAME_B = pipex_bonus
 
-SRC			=	pipex.c
-OBJ			=	$(SRC:.c=.o)
+SRC = src/pipex.c \
+	src/utils.c  
 
-# SRC_B		=	pipex_bonus.c
-# OBJ_B		=	$(SRC_B:.c=.o)
+OBJ = $(SRC:.c=.o)
 
-LIBFT		=	libft/libft.a
+LIBFT =	libft/libft.a
 
-CC			=	cc
-CFLAGS		=	
-# -Wall -Wextra -Werror -g
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g
 
 $(NAME): $(OBJ)
 		cd libft && make
 		$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
-
-# bonus:	$(OBJ_B)
-		# cd libft && make
-		# $(CC) $(CFLAGS) $(SRC_B) $(LIBFT) -o $(NAME_B)
 
 all:	$(NAME)
 
