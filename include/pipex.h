@@ -21,7 +21,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-struct s_Pipex
+typedef struct s_Pipex
 {
 	char	**env_path;
 	char	*cmd_path;
@@ -31,17 +31,17 @@ struct s_Pipex
 	int		fd[2];
 	int		pids1;
 	int		pids2;
-}pipex;
+}t_pipex;
 
 
-void	child_process_1(char **argv);
-void	child_process_2(char **argv);
-void	freePipex(void);
-void	init_struct(void);
-void	file_creation(char **argv);
-void	error_handling(int function, char *str);
-void	envp_path_creation(char **envp);
-int	path_verification(void);
-void	exit_pipex(char *str);
+void	child_process_1(char **argv, char **envp, t_pipex *pipex);
+void	child_process_2(char **argv, char **envp, t_pipex *pipex);
+void	freePipex(t_pipex *pipex);
+t_pipex	*init_struct(void);
+void	file_creation(char **argv, t_pipex *pipex);
+void	error_handling(int function, char *str, t_pipex *pipex);
+void	envp_path_creation(char **envp, t_pipex *pipex);
+int	path_verification(t_pipex *pipex);
+void	exit_pipex(char *str, t_pipex *pipex);
 
 #endif

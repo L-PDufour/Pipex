@@ -11,6 +11,22 @@
 					"isDefault": true
 				}
 			}
+		],
+		"configurations": [
+		{
+			"name": "(lldb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "/Users/ldufour/Documents/Pipex/pipex",
+			"args": ["infile", "ls", "ls", "outfile"],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "lldb"
+		}
+
+
 		]
 	}
 

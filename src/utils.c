@@ -12,32 +12,32 @@
 
 #include "../include/pipex.h"
 
-void	freePipex(void)
+void	freePipex(t_pipex *pipex)
 {
 	int	i;
 
 	i = -1;
-	if (pipex.env_path != NULL)
+	if (pipex->env_path != NULL)
 	{
-		while (pipex.env_path[++i] != NULL)
-			free(pipex.env_path[i]);
-		free(pipex.env_path);
+		while (pipex->env_path[++i] != NULL)
+			free(pipex->env_path[i]);
+		free(pipex->env_path);
 	}
-	if (pipex.cmd_path != NULL)
-		free(pipex.cmd_path);
-	if (pipex.cmd_args != NULL)
+	if (pipex->cmd_path != NULL)
+		free(pipex->cmd_path);
+	if (pipex->cmd_args != NULL)
 	{
 		i = -1;
-		while (pipex.cmd_args[++i] != NULL)
-			free(pipex.cmd_args[i]);
-		free(pipex.cmd_args);
+		while (pipex->cmd_args[++i] != NULL)
+			free(pipex->cmd_args[i]);
+		free(pipex->cmd_args);
 	}
 }
 
-void	exit_pipex(char *str)
+void	exit_pipex(char *str, t_pipex *pipex)
 {
 	printf("%s\n", str);
-	freePipex();
+	freePipex(pipex);
 	exit(0);
 }
 void	free_double_array(char **array)
@@ -53,35 +53,38 @@ void	free_double_array(char **array)
 	free(array);
 }
 
-int	path_verification(void)
+int	path_verification(t_pipex *pipex)
 {
 	int		i;
 	char	*str;
 
 	i = 0;
-	while (pipex.env_path[i] != NULL)
+	while (pipex->env_path[i] != NULL)
 	{
-		str = ft_strjoin(pipex.env_path[i], pipex.cmd_args[0]);
+		// fflush(NULL);
+		str = ft_strjoin(pipex->env_path[i], pipex->cmd_args[0]);
+		printf("%s\n", str);
 		if (access(str, F_OK | X_OK) == 0)
 		{
-			pipex.cmd_path = ft_strdup(str);
+			pipex->cmd_path = ft_strdup(str);
+			// printf("%s\n", pipex.cmd_path);
 			free(str);
 			return (0);
 		}
 		free(str);
 		i++;
 	}
-	exit_pipex("Can't access file");
+	exit_pipex("Can't access file", pipex);
 	return (1);
 }
 
-void	error_handling(int function, char *str)
+void	error_handling(int function, char *str, t_pipex *pipex)
 {
 	if (function == -1)
-		exit_pipex(str);
+		exit_pipex(str, pipex);
 }
 
-void	envp_path_creation(char **envp)
+void	envp_path_creation(char **envp, t_pipex *pipex)
 {
 	char	*str;
 	int		i;
@@ -93,11 +96,12 @@ void	envp_path_creation(char **envp)
 		if (ft_strncmp(*envp, "PATH", 4) == 0)
 		{
 			str = ft_substr(*envp, 5, (ft_strlen(*envp)));
-			pipex.env_path = ft_split(str, ':');
+			pipex->env_path = ft_split(str, ':');
 			free(str);
-			while (pipex.env_path[i] != NULL)
+			while (pipex->env_path[i] != NULL)
 			{
-				ft_strcat(pipex.env_path[i], "/");
+				ft_strcat(pipex->env_path[i], "/");
+				// printf("%s\n", pipex.env_path[i]);
 				i++;
 			}
 		}
