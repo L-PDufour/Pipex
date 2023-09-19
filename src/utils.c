@@ -77,12 +77,6 @@ int	path_verification(t_pipex *pipex)
 	return (1);
 }
 
-void	error_handling(int function, char *str, t_pipex *pipex)
-{
-	if (function == -1)
-		exit_pipex(str, pipex);
-}
-
 void	envp_path_creation(char **envp, t_pipex *pipex)
 {
 	char	*str;

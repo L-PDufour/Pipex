@@ -6,7 +6,7 @@
 /*   By: ldufour <ldufour@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 15:25:29 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/19 13:47:01 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/09/19 13:57:22 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,6 @@ int	main(int argc, char *argv[], char **envp)
 	close(pipex->fd[1]);
 	waitpid(pipex->pids1, &status, 0);
 	waitpid(pipex->pids2, &status, 0);
-	freePipex(pipex);
+	free_pipex(pipex);
 	return (0);
 }

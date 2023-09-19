@@ -35,10 +35,9 @@ typedef struct s_Pipex
 
 void	child_process_1(char **argv, char **envp, t_pipex *pipex);
 void	child_process_2(char **argv, char **envp, t_pipex *pipex);
-void	freePipex(t_pipex *pipex);
+void	free_pipex(t_pipex *pipex);
 t_pipex	*init_struct(void);
 void	file_creation(char **argv, t_pipex *pipex);
-void	error_handling(int function, char *str, t_pipex *pipex);
 void	envp_path_creation(char **envp, t_pipex *pipex);
 int	path_verification(t_pipex *pipex);
 void	exit_pipex(char *str, t_pipex *pipex);
