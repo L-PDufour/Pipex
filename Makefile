@@ -6,11 +6,11 @@
 #    By: ldufour </var/spool/mail/ldufour>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/18 13:36:35 by ldufour           #+#    #+#              #
-#    Updated: 2023/09/18 14:03:13 by ldufour          ###   ########.fr        #
+#    Updated: 2023/09/18 15:26:47 by ldufour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
+NAME = Pipex
 NAME_B = pipex_bonus
 
 SRC = src/pipex.c \

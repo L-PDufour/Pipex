@@ -12,9 +12,7 @@
 
 #include "../include/pipex.h"
 
-
-
-void	child_process_1(char **argv)
+	void	child_process_1(char **argv)
 {
 	error_handling(dup2(pipex.infile, STDIN_FILENO), "Failed dup2");
 	error_handling(dup2(pipex.fd[1], STDOUT_FILENO), "Failed dup2");
@@ -64,6 +62,7 @@ void	init_struct(void)
 int	main(int argc, char *argv[], char **envp)
 {
 
+	struct s_Pipex pipex;
 	if (argc < 5)
 		exit_pipex("Invalid arguments");
 	init_struct();

@@ -6,7 +6,7 @@
 /*   By: ldufour </var/spool/mail/ldufour>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 13:24:38 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/18 14:21:45 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/09/19 05:42:18 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-struct		s_Pipex
+struct s_Pipex
 {
 	char	**env_path;
 	char	*cmd_path;
@@ -31,8 +31,14 @@ struct		s_Pipex
 	int		fd[2];
 	int		pids1;
 	int		pids2;
-};
+}pipex;
+
+
+void	child_process_1(char **argv);
+void	child_process_2(char **argv);
 void	freePipex(void);
+void	init_struct(void);
+void	file_creation(char **argv);
 void	error_handling(int function, char *str);
 void	envp_path_creation(char **envp);
 int	path_verification(void);
