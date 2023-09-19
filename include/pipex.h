@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldufour </var/spool/mail/ldufour>          +#+  +:+       +#+        */
+/*   By: ldufour <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 13:24:38 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/19 05:42:18 by ldufour          ###   ########.fr       */
+/*   Created: 2023/09/19 13:30:20 by ldufour           #+#    #+#             */
+/*   Updated: 2023/09/19 13:30:20 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
-#define PIPEX_H
+# define PIPEX_H
 
 # include "../libft/libft.h"
 # include <errno.h>
@@ -32,7 +32,6 @@ typedef struct s_Pipex
 	int		pids1;
 	int		pids2;
 }t_pipex;
-
 
 void	child_process_1(char **argv, char **envp, t_pipex *pipex);
 void	child_process_2(char **argv, char **envp, t_pipex *pipex);

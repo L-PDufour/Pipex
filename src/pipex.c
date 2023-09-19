@@ -6,7 +6,7 @@
 /*   By: ldufour <ldufour@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 15:25:29 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/18 14:23:41 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/09/19 13:47:01 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,34 +44,34 @@ void	file_creation(char **argv, t_pipex *pipex)
 	if (pipex->infile < 0 || pipex->outfile < 0)
 		exit_pipex("Error with file", pipex);
 }
-t_pipex *init_struct(void)
+
+t_pipex	*init_struct(void)
 {
-	static t_pipex *pipex;
+	static t_pipex	*pipex;
+
 	if (!pipex)
 	{
-	pipex = malloc(sizeof(*pipex));	
+		pipex = malloc(sizeof(*pipex));	
 		if (!pipex)
-			return(NULL);
-	pipex->env_path = NULL;
-	pipex->cmd_path = NULL;
-	pipex->cmd_args = NULL;
-	pipex->infile = 0;
-	pipex->outfile = 0;
-	pipex->fd[0] = 0;
-	pipex->fd[1] = 0;
-	pipex->pids1 = 0;
-	pipex->pids2 = 0;
+			return (NULL);
+		pipex->env_path = NULL;
+		pipex->cmd_path = NULL;
+		pipex->cmd_args = NULL;
+		pipex->infile = 0;
+		pipex->outfile = 0;
+		pipex->fd[0] = 0;
+		pipex->fd[1] = 0;
+		pipex->pids1 = 0;
+		pipex->pids2 = 0;
 	}
-
-
 	return (pipex);
 }
 
 int	main(int argc, char *argv[], char **envp)
 {
-	int status;
-	
-	t_pipex *pipex;
+	int	status;
+	t_pipex	*pipex;
+
 	pipex = NULL;
 	pipex = init_struct();
 	if (argc < 5)
@@ -86,11 +86,7 @@ int	main(int argc, char *argv[], char **envp)
 	if (pipex->pids2 == 0)
 		child_process_2(argv, envp, pipex);
 	if (pipex->pids1 == -1 || pipex->pids2 == -1)
-	{
-		ft_putstr_fd("Error", STDERR_FILENO);
-		perror("fork");
 		exit(EXIT_FAILURE);
-	}
 	close(pipex->fd[0]);
 	close(pipex->fd[1]);
 	waitpid(pipex->pids1, &status, 0);

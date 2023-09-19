@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldufour </var/spool/mail/ldufour>          +#+  +:+       +#+        */
+/*   By: ldufour <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 13:34:46 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/18 15:24:29 by ldufour          ###   ########.fr       */
+/*   Created: 2023/09/19 13:29:51 by ldufour           #+#    #+#             */
+/*   Updated: 2023/09/19 13:29:51 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	freePipex(t_pipex *pipex)
+void	free_pipex(t_pipex *pipex)
 {
 	int	i;
 
@@ -37,9 +37,10 @@ void	freePipex(t_pipex *pipex)
 void	exit_pipex(char *str, t_pipex *pipex)
 {
 	printf("%s\n", str);
-	freePipex(pipex);
+	free_pipex(pipex);
 	exit(0);
 }
+
 void	free_double_array(char **array)
 {
 	int	i;
@@ -61,13 +62,11 @@ int	path_verification(t_pipex *pipex)
 	i = 0;
 	while (pipex->env_path[i] != NULL)
 	{
-		// fflush(NULL);
 		str = ft_strjoin(pipex->env_path[i], pipex->cmd_args[0]);
 		printf("%s\n", str);
 		if (access(str, F_OK | X_OK) == 0)
 		{
 			pipex->cmd_path = ft_strdup(str);
-			// printf("%s\n", pipex.cmd_path);
 			free(str);
 			return (0);
 		}
@@ -101,11 +100,9 @@ void	envp_path_creation(char **envp, t_pipex *pipex)
 			while (pipex->env_path[i] != NULL)
 			{
 				ft_strcat(pipex->env_path[i], "/");
-				// printf("%s\n", pipex.env_path[i]);
 				i++;
 			}
 		}
 		envp++;
 	}
 }
-

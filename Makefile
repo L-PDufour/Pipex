@@ -3,15 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ldufour </var/spool/mail/ldufour>          +#+  +:+       +#+         #
+#    By: ldufour <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/09/18 13:36:35 by ldufour           #+#    #+#              #
-#    Updated: 2023/09/18 15:26:47 by ldufour          ###   ########.fr        #
+#    Created: 2023/09/19 13:31:48 by ldufour           #+#    #+#              #
+#    Updated: 2023/09/19 13:32:20 by ldufour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-NAME_B = pipex_bonus
 
 SRC = src/pipex.c \
 	src/utils.c  
@@ -31,12 +30,12 @@ all:	$(NAME)
 
 clean:	
 		cd libft && make clean
-		rm -f $(OBJ) $(OBJ_B)
+		rm -f $(OBJ) 
 
 fclean:	clean
 		cd libft && make fclean
-		rm -f $(NAME) $(NAME_B)
+		rm -f $(NAME) 
 
 re:		fclean all
 
-.PHONY: all clean fclean bonus
+.PHONY: all clean fclean 
