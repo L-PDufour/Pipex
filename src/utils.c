@@ -12,6 +12,16 @@
 
 #include "../include/pipex.h"
 
+/**
+ * Free allocated resources and deallocate the t_pipex struct.
+ *
+ * This function is responsible for releasing memory allocated for various
+ * components within the 't_pipex' struct, including environment paths and
+ * command arguments, and then deallocates the 't_pipex' struct itself.
+ *
+ * @param pipex  A pointer to the t_pipex struct containing allocated resources.
+ */
+
 void	free_pipex(t_pipex *pipex)
 {
 	int	i;
@@ -35,25 +45,39 @@ void	free_pipex(t_pipex *pipex)
 	free(pipex);
 }
 
-void	exit_pipex(char *str, t_pipex *pipex)
+/**
+ * Exit the pipex program with an error message and clean up resources.
+ *
+ * This function prints an error message to the standard error (stderr) stream,
+ * frees resources associated with the 't_pipex' struct, and exits the program.
+ *
+ * @param str    The error message to be displayed.
+ * @param pipex  A pointer to the t_pipex struct containing allocated resources.
+ */
+
+void	exit_pipex(int error, char *str, t_pipex *pipex)
 {
-	fprintf(stderr,"%s\n", str);
-	free_pipex(pipex);
-	exit(0);
+	if (error == -1)
+	{
+		fprintf(stderr, "%s\n", str);
+		free_pipex(pipex);
+		exit(0);
+	}
 }
 
-// void	free_double_array(char **array)
-// {
-// 	int	i;
-//
-// 	i = 0;
-// 	while (array[i] != NULL)
-// 	{
-// 		free(array[i]);
-// 		i++;
-// 	}
-// 	free(array);
-// }
+/*
+ * Verify and set the command path for execution.
+ *
+ * This function verifies the existence and executable permission of the command
+ * in the directories specified by the 'env_path' array. If a valid executable
+ * command is found, it sets the 'cmd_path' member in the 't_pipex' struct.
+ * If no valid command is found, it exits the program with an error message.
+ *
+ * @param pipex  A pointer to the t_pipex struct containing configuration
+ * details.
+ *
+ * @return 0 on success (command found and executable), 1 on failure.
+ */
 
 int	path_verification(t_pipex *pipex)
 {
@@ -73,9 +97,22 @@ int	path_verification(t_pipex *pipex)
 		free(str);
 		i++;
 	}
-	exit_pipex("Command not found", pipex);
+	exit_pipex(-1, "Command not found", pipex);
 	return (1);
 }
+
+/**
+ * Create a path array from the PATH environment variable.
+ *
+ * This function parses the PATH environment variable to create an array of
+ * directory paths,
+	which can be used for command execution in the pipex program.
+ * It sets up the 'env_path' member in the 't_pipex' struct.
+ *
+ * @param envp   An array of strings representing the environment variables.
+
+	* @param pipex  A pointer to the t_pipex struct where 'env_path' will be stored.
+ */
 
 void	envp_path_creation(char **envp, t_pipex *pipex)
 {

@@ -11,11 +11,16 @@
 # **************************************************************************** #
 
 NAME = pipex
+NAMEB = pipex_bonus
 
 SRC = src/pipex.c \
 	src/utils.c  
 
 OBJ = $(SRC:.c=.o)
+
+SRCB = bonus/pipex_bonus.c \
+	src/utils.c
+OBJB = $(SRCB:c=o)
 
 LIBFT =	libft/libft.a
 
@@ -26,15 +31,19 @@ $(NAME): $(OBJ)
 		cd libft && make
 		$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
 
+bonus:	$(OBJB)
+		cd libft && make
+		$(CC) $(CFLAGS) $(SRCB) $(LIBFT) -o $(NAMEB)
+
 all:	$(NAME)
 
 clean:	
 		cd libft && make clean
-		rm -f $(OBJ) 
+		rm -f $(OBJ) $(OBJB)
 
 fclean:	clean
 		cd libft && make fclean
-		rm -f $(NAME) 
+		rm -f $(NAME) $(NAMEB)
 
 re:		fclean all
 

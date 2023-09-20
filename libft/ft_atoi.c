@@ -6,7 +6,7 @@
 /*   By: ldufour <marvin@42quebec.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 08:28:19 by ldufour           #+#    #+#             */
-/*   Updated: 2023/03/06 08:28:25 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/09/20 07:28:32 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	ft_atoi(const char *str)
 	}
 	while (*str >= 48 && *str <= 57)
 	{
-	result = (result * 10) + (*str - 48);
-	str++;
+		result = (result * 10) + (*str - 48);
+		str++;
 	}
 	return (result * sign);
 }

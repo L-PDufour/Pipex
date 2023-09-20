@@ -6,48 +6,94 @@
 /*   By: ldufour <ldufour@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 15:25:29 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/19 13:57:22 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/09/20 11:23:57 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
+/*
+ * Execute the first child process in the pipex program.
+ *
+ * This function is responsible for setting up the first child process in the
+ * pipex program. It configures file descriptors, command execution, and
+ * handles potential errors during the process execution.
+ *
+ * @param argv   An array of strings containing command-line arguments.
+ * @param envp   An array of strings representing the environment variables.
+ * @param pipex  A pointer to the t_pipex struct containing configuration
+ * details.
+ */
+
 void	child_process_1(char **argv, char **envp, t_pipex *pipex)
 {
-	dup2(pipex->infile, STDIN_FILENO);
-	dup2(pipex->fd[1], STDOUT_FILENO);
+	exit_pipex(dup2(pipex->infile, STDIN_FILENO), "dup2 error", pipex);
+	exit_pipex(dup2(pipex->fd[1], STDOUT_FILENO), "dup2 error", pipex);
 	close(pipex->fd[0]);
 	close(pipex->infile);
 	pipex->cmd_args = ft_split(argv[2], ' ');
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, envp);
-	exit_pipex("Can't execute child process 1", pipex);
+	exit_pipex(-1, "Can't execute child process 1", pipex);
 }
+
+/*
+ * Execute the second child process in the pipex program.
+ *
+ * This function is responsible for setting up the second child process in the
+ * pipex program. It configures file descriptors, command execution, and
+ * handles potential errors during the process execution.
+ *
+ * @param argv   An array of strings containing command-line arguments.
+ * @param envp   An array of strings representing the environment variables.
+ * @param pipex  A pointer to the t_pipex struct containing configuration
+ * details.
+ */
 
 void	child_process_2(char **argv, char **envp, t_pipex *pipex)
 {
 	int	status;
 
 	waitpid(pipex->pids1, &status, 0);
-	dup2(pipex->outfile, STDOUT_FILENO);
-	dup2(pipex->fd[0], STDIN_FILENO);
+	exit_pipex(dup2(pipex->outfile, STDOUT_FILENO), "dup2 error", pipex);
+	exit_pipex(dup2(pipex->fd[0], STDIN_FILENO), "du2 error", pipex);
 	close(pipex->fd[1]);
 	close(pipex->outfile);
 	pipex->cmd_args = ft_split(argv[3], ' ');
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, envp);
-	exit_pipex("Can't execute child process 2", pipex);
+	exit_pipex(-1, "Can't execute child process 2", pipex);
 }
+
+/*
+ * Create and set file descriptors for input and output files.
+ *
+ * This function takes the input and output file paths from the `argv` array
+ * and opens the files, setting up the corresponding file descriptors in the
+ * `t_pipex` struct for later use in the pipex program.
+ *
+ * @param argv   An array of strings containing command-line arguments.
+ * @param pipex  A pointer to the t_pipex struct where file descriptors are
+ * stored.
+ */
 
 void	file_creation(char **argv, t_pipex *pipex)
 {
 	pipex->infile = open(argv[1], O_RDONLY);
 	pipex->outfile = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (pipex->infile < 0)
-		exit_pipex("Error with infile", pipex);
-	if (pipex->outfile < 0)
-		exit_pipex("Error with outfile", pipex);
+	exit_pipex(pipex->infile, "Error with infile", pipex);
+	exit_pipex(pipex->outfile, "Error with outfile", pipex);
 }
+
+/*
+ * Initialize the t_pipex struct with default values.
+ *
+ * This function allocates memory for a t_pipex struct and initializes its
+ * members with default values, making it ready for use in the pipex program.
+ * If the struct has already been initialized, it returns the existing instance.
+ *
+ * @return A pointer to the initialized t_pipex struct or NULL on failure.
+ */
 
 t_pipex	*init_struct(void)
 {
@@ -57,7 +103,7 @@ t_pipex	*init_struct(void)
 	{
 		pipex = malloc(sizeof(*pipex));
 		if (!pipex)
-			return (NULL);
+			exit_pipex(-1, "Malloc failure", pipex);	
 		pipex->env_path = NULL;
 		pipex->cmd_path = NULL;
 		pipex->cmd_args = NULL;
@@ -71,6 +117,19 @@ t_pipex	*init_struct(void)
 	return (pipex);
 }
 
+/**
+ * Main function for the pipex program.
+ *
+ * This function orchestrates the execution of the pipex program, which involves
+ * creating processes, setting up pipes, and executing commands.
+ *
+ * @param argc  The number of command-line arguments.
+ * @param argv  An array of strings containing the command-line arguments.
+ * @param envp  An array of strings representing the environment variables.
+ *
+ * @return 0 on successful execution, non-zero on error.
+ */
+
 int	main(int argc, char *argv[], char **envp)
 {
 	int		status;
@@ -78,8 +137,8 @@ int	main(int argc, char *argv[], char **envp)
 
 	pipex = NULL;
 	pipex = init_struct();
-	if (argc < 5)
-		exit_pipex("Invalid arguments", pipex);
+	if (argc != 5)
+		exit_pipex(-1, "Invalid arguments /.pipex infile \"cmd1\" \"cmd2\" outfile\n", pipex);
 	file_creation(argv, pipex);
 	envp_path_creation(envp, pipex);
 	pipe(pipex->fd);
@@ -90,7 +149,7 @@ int	main(int argc, char *argv[], char **envp)
 	if (pipex->pids2 == 0)
 		child_process_2(argv, envp, pipex);
 	if (pipex->pids1 == -1 || pipex->pids2 == -1)
-		exit(EXIT_FAILURE);
+		exit_pipex(-1, "Fork error", pipex);
 	close(pipex->fd[0]);
 	close(pipex->fd[1]);
 	waitpid(pipex->pids1, &status, 0);
