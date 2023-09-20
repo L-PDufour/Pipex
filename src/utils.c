@@ -32,27 +32,28 @@ void	free_pipex(t_pipex *pipex)
 			free(pipex->cmd_args[i]);
 		free(pipex->cmd_args);
 	}
+	free(pipex);
 }
 
 void	exit_pipex(char *str, t_pipex *pipex)
 {
-	printf("%s\n", str);
+	fprintf(stderr,"%s\n", str);
 	free_pipex(pipex);
 	exit(0);
 }
 
-void	free_double_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i] != NULL)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
+// void	free_double_array(char **array)
+// {
+// 	int	i;
+//
+// 	i = 0;
+// 	while (array[i] != NULL)
+// 	{
+// 		free(array[i]);
+// 		i++;
+// 	}
+// 	free(array);
+// }
 
 int	path_verification(t_pipex *pipex)
 {
@@ -63,7 +64,6 @@ int	path_verification(t_pipex *pipex)
 	while (pipex->env_path[i] != NULL)
 	{
 		str = ft_strjoin(pipex->env_path[i], pipex->cmd_args[0]);
-		printf("%s\n", str);
 		if (access(str, F_OK | X_OK) == 0)
 		{
 			pipex->cmd_path = ft_strdup(str);
@@ -73,7 +73,7 @@ int	path_verification(t_pipex *pipex)
 		free(str);
 		i++;
 	}
-	exit_pipex("Can't access file", pipex);
+	exit_pipex("Command not found", pipex);
 	return (1);
 }
 

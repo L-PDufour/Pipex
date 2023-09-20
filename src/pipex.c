@@ -21,6 +21,7 @@ void	child_process_1(char **argv, char **envp, t_pipex *pipex)
 	pipex->cmd_args = ft_split(argv[2], ' ');
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, envp);
+	exit_pipex("Can't execute child process 1", pipex);
 }
 
 void	child_process_2(char **argv, char **envp, t_pipex *pipex)
@@ -35,14 +36,17 @@ void	child_process_2(char **argv, char **envp, t_pipex *pipex)
 	pipex->cmd_args = ft_split(argv[3], ' ');
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, envp);
+	exit_pipex("Can't execute child process 2", pipex);
 }
 
 void	file_creation(char **argv, t_pipex *pipex)
 {
 	pipex->infile = open(argv[1], O_RDONLY);
 	pipex->outfile = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (pipex->infile < 0 || pipex->outfile < 0)
-		exit_pipex("Error with file", pipex);
+	if (pipex->infile < 0)
+		exit_pipex("Error with infile", pipex);
+	if (pipex->outfile < 0)
+		exit_pipex("Error with outfile", pipex);
 }
 
 t_pipex	*init_struct(void)
@@ -51,7 +55,7 @@ t_pipex	*init_struct(void)
 
 	if (!pipex)
 	{
-		pipex = malloc(sizeof(*pipex));	
+		pipex = malloc(sizeof(*pipex));
 		if (!pipex)
 			return (NULL);
 		pipex->env_path = NULL;
@@ -69,7 +73,7 @@ t_pipex	*init_struct(void)
 
 int	main(int argc, char *argv[], char **envp)
 {
-	int	status;
+	int		status;
 	t_pipex	*pipex;
 
 	pipex = NULL;
