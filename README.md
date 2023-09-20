@@ -6,15 +6,20 @@
 
 * * *
 - Learn about Pipelines in Unix and process.
-- fork() create a child process id 0 who must end with wait() before the parent every time.
-- create process from the parent
-- wait the for multiple child to stop in case of multiple fork 
-- FIFO need two open end to work
-- Simulating the pipe in C ("ping -c 5 google.com | grep rtt")
-- - Pipe  have two end
-- - Stdout(write) |(route)| Stdin(read)
-- Need to learn how to execute program
-- fork(): Create a child process who inherit almost everything from the parent(ex: value, variable)
-- pipe(): Create a channel between two process to exchange data. A (write)===(read). Everything must close, if not, the program still wait for data transfer.
-- dup2(): Copy and switch a file descriptor. Ex: we can use dup2() to redirect stdin to another file.
-- I have been reading and watching videos the past days. I'm trying to have a mental model of the data I/O and the redirection.
+- We can use these external functs : open, close, read, write, malloc, free, perror, strerror, access, dup, dup2, execve, exit, fork, pipe, unlink, wait, waitpid
+- At first, I was reading and watching videos. I was trying to have a mental model of the data I/O and the redirection.
+- Next, I did some small example to help my understanding. I did a lot of rework and used a struct to help me.
+  ```
+  typedef struct s_Pipex
+{
+	char	**env_path;
+	char	*cmd_path;
+	char	**cmd_args;
+	int		infile;
+	int		outfile;
+	int		fd[2];
+	int		pids1;
+	int		pids2;
+}	
+  ```
+- 
