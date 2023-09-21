@@ -25,7 +25,7 @@ OBJB = $(SRCB:c=o)
 LIBFT =	libft/libft.a
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = #-Wall -Wextra -Werror -g
 
 $(NAME): $(OBJ)
 		cd libft && make
