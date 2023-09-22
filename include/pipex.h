@@ -16,9 +16,9 @@
 # include "../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
-# include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
@@ -32,6 +32,8 @@ typedef struct s_Pipex
 	int		fd[2];
 	int		pids1;
 	int		pids2;
+	int		i;
+	int		j;
 }			t_pipex;
 
 void		child_process_1(char **argv, char **envp, t_pipex *pipex);
