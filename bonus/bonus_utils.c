@@ -12,13 +12,13 @@
 
 #include "../include/pipex.h"
 
-void	close_pipes(t_pipex *pipex, int process_nb, int pipes[][2])
+void	close_pipes(t_pipex *pipex, int pipes_nb)
 {
 	pipex->j = -1;
-	while (++pipex->j < process_nb)
+	while (++pipex->j < pipes_nb)
 	{
-		close(pipes[pipex->j][0]);
-		close(pipes[pipex->j][1]);
+		close(pipex->pipes[pipex->j][0]);
+		close(pipex->pipes[pipex->j][1]);
 	}
 }
 

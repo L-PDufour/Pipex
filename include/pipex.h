@@ -34,11 +34,12 @@ typedef struct s_Pipex
 	int		pids2;
 	int		i;
 	int		j;
-	int		pids[];
+	int		*pipes[2];
+	int		*pids; // Comment je free ca
 }			t_pipex;
 
 void		file_creation_bonus(char **argv, t_pipex *pipex, int argc);
-void		close_pipes(t_pipex *pipex, int pipes_nb, int pipes[][2]);
+void		close_pipes(t_pipex *pipex, int pipes_nb);
 void		child_process_1(char **argv, char **envp, t_pipex *pipex);
 t_pipex		*init_struct(void);
 void		child_process_2(char **argv, char **envp, t_pipex *pipex);
