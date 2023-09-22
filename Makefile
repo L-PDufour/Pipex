@@ -19,13 +19,15 @@ SRC = src/pipex.c \
 OBJ = $(SRC:.c=.o)
 
 SRCB = bonus/pipex_bonus.c \
+	bonus/bonus_utils.c \
 	src/utils.c
+	
 OBJB = $(SRCB:c=o)
 
 LIBFT =	libft/libft.a
 
 CC = cc
-CFLAGS = #-Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 $(NAME): $(OBJ)
 		cd libft && make

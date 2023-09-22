@@ -34,9 +34,13 @@ typedef struct s_Pipex
 	int		pids2;
 	int		i;
 	int		j;
+	int		pids[];
 }			t_pipex;
 
+void		file_creation_bonus(char **argv, t_pipex *pipex, int argc);
+void		close_pipes(t_pipex *pipex, int pipes_nb, int pipes[][2]);
 void		child_process_1(char **argv, char **envp, t_pipex *pipex);
+t_pipex		*init_struct(void);
 void		child_process_2(char **argv, char **envp, t_pipex *pipex);
 void		free_pipex(t_pipex *pipex);
 t_pipex		*init_struct(void);

@@ -12,6 +12,39 @@
 
 #include "../include/pipex.h"
 
+/*
+ * Initialize the t_pipex struct with default values.
+ *
+ * This function allocates memory for a t_pipex struct and initializes its
+ * members with default values, making it ready for use in the pipex program.
+ * If the struct has already been initialized, it returns the existing instance.
+ *
+ * @return A pointer to the initialized t_pipex struct or NULL on failure.
+ */
+
+t_pipex	*init_struct(void)
+{
+	static t_pipex	*pipex;
+
+	if (!pipex)
+	{
+		pipex = malloc(sizeof(*pipex));
+		if (!pipex)
+			exit_pipex(-1, "Malloc failure", pipex);
+		pipex->env_path = NULL;
+		pipex->cmd_path = NULL;
+		pipex->cmd_args = NULL;
+		pipex->infile = 0;
+		pipex->outfile = 0;
+		pipex->fd[0] = 0;
+		pipex->fd[1] = 0;
+		pipex->pids1 = 0;
+		pipex->pids2 = 0;
+		pipex->i = -1;
+		pipex->j = -1;
+	}
+	return (pipex);
+}
 /**
  * Free allocated resources and deallocate the t_pipex struct.
  *
