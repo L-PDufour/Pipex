@@ -34,7 +34,8 @@ typedef struct s_Pipex
 	int		pids2;
 	int		i;
 	int		j;
-	int		pids[];
+	int		pids_nb;
+	int		pids_bonus[];
 }			t_pipex;
 
 void		file_creation_bonus(char **argv, t_pipex *pipex, int argc);
