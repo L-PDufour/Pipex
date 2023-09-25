@@ -65,13 +65,13 @@ void	pipex_process(t_pipex *pipex, int process_nb, char **argv, int pipes_nb, in
 	}
 }
 
-// void	pids_creation_bonus(t_pipex *pipex, int argc)
-// {
-// 	pipex->pids_nb = argc - 3;
-// 	// pipex->pids_bonus = (int *)malloc(sizeof(int) * pipex->pids_nb); 
-// 	*pipex->pids_bonus =  pipex->pids_nb; 
-//
-// }
+void	pids_creation_bonus( int argc, int number)
+{
+	int fd[argc * number];
+	// // pipex->pids_bonus = (int *)malloc(sizeof(int) * pipex->pids_nb); 
+	// *pipex->pids_bonus =  pipex->pids_nb; 
+
+}
 
 int	main(int argc, char *argv[], char **envp)
 {
