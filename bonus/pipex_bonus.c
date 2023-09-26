@@ -50,9 +50,11 @@ static void	child_process_x_bonus(char **argv, t_pipex *pipex, int **pipes,
 	exit_pipex(-1, "Can't execute child process 2", pipex);
 }
 
-void	pipex_process(t_pipex *pipex, int process_nb, char **argv, int pipes_nb,
-		int **pipes)
+void	pipex_process(t_pipex *pipex, int process_nb, char **argv, int **pipes)
 {
+	int	pipes_nb;
+
+	pipes_nb = process_nb - 1;
 	pipex->i = -1;
 	while (++pipex->i < process_nb)
 	{
@@ -72,34 +74,22 @@ int	main(int argc, char *argv[], char **envp)
 	int		process_nb;
 	int		pipes_nb;
 	int		**pipes;
-	int		i;
-	int		j;
 
-	i = -1;
 	process_nb = argc - 3;
-	pipes_nb = argc - 4;
+	pipes_nb = process_nb - 1;
 	pipex = NULL;
 	pipex = init_struct();
-	pipex->pids_nb = process_nb;
 	if (argc < 5)
 		exit_pipex(-1, "Invalid arguments", pipex);
 	file_creation_bonus(argv, pipex, argc);
 	envp_path_creation(envp, pipex);
-	pipes = (int **)malloc(pipes_nb * sizeof(int *));
-	while (++i < pipes_nb)
-	{
-		pipes[i] = (int *)malloc(2 * sizeof(int));
-		j = -1;
-		while (++j < 2)
-			pipes[i][j] = j;
-	}
-	while (++pipex->i < pipes_nb)
-		pipe(pipes[pipex->i]);
-	pipex_process(pipex, process_nb, argv, pipes_nb, pipes);
+	pipes = pipes_creation(pipes_nb, pipex);
+	pipex_process(pipex, process_nb, argv, pipes);
 	close_pipes(pipex, pipes_nb, pipes);
 	pipex->i = -1;
 	while (++pipex->i < process_nb)
 		wait(NULL);
+	free_pipes(pipes, pipex, pipes_nb);
 	free_pipex(pipex);
 	return (0);
 }
