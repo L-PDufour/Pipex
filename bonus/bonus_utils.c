@@ -12,7 +12,7 @@
 
 #include "../include/pipex.h"
 
-void	close_pipes(t_pipex *pipex, int process_nb, int pipes[][2])
+void	close_pipes(t_pipex *pipex, int process_nb, int **pipes)
 {
 	pipex->j = -1;
 	while (++pipex->j < process_nb)

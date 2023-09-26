@@ -27,11 +27,11 @@ else
 	echo "failure"
 fi
 
-# ./pipex_bonus infile "grep 'pattern1'" "sort -r" "head -n 10"  outfile2
-# < infile grep "pattern1" | sort -r | head -n 10 > output3
-# diff outfile3 output3
-# if [ $? -eq 0 ]; then 
-# 	echo "success"
-# else 
-# 	echo "failure"
-# fi
+./pipex_bonus infile "grep pattern1" "sort -r" "head -n 10"  outfile2
+< infile grep "pattern1" | sort -r | head -n 10 > output3
+diff outfile3 output3
+if [ $? -eq 0 ]; then 
+	echo "success"
+else 
+	echo "failure"
+fi
