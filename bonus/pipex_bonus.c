@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+#include <stdio.h>
+#include <unistd.h>
 
 static void	child_process_1_bonus(char **argv, t_pipex *pipex, int **pipes,
 		int process_nb)
@@ -68,12 +70,23 @@ void	pipex_process(t_pipex *pipex, int process_nb, char **argv, int **pipes)
 	}
 }
 
+char	*here_doc(void)
+{
+	char	*str;
+
+	str = get_next_line(0);
+	return str;
+}
+
 int	main(int argc, char *argv[], char **envp)
 {
 	t_pipex	*pipex;
 	int		process_nb;
 	int		pipes_nb;
 	int		**pipes;
+	int fd;
+	int stdin_fd;
+	char *lines;
 
 	process_nb = argc - 3;
 	pipes_nb = process_nb - 1;
@@ -81,15 +94,31 @@ int	main(int argc, char *argv[], char **envp)
 	pipex = init_struct();
 	if (argc < 5)
 		exit_pipex(-1, "Invalid arguments", pipex);
-	file_creation_bonus(argv, pipex, argc);
-	envp_path_creation(envp, pipex);
-	pipes = pipes_creation(pipes_nb, pipex);
-	pipex_process(pipex, process_nb, argv, pipes);
-	close_pipes(pipex, pipes_nb, pipes);
-	pipex->i = -1;
-	while (++pipex->i < process_nb)
-		wait(NULL);
-	free_pipes(pipes, pipex, pipes_nb);
-	free_pipex(pipex);
+	if (argc == 6 && (ft_strncmp(argv[1], "here_doc", 8)) == 0)
+	{
+		printf("C'est un depart\n");
+		fd = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		stdin_fd = dup(STDIN_FILENO);
+		while (1)
+		{
+			lines = get_next_line(stdin_fd);
+			if (lines == NULL)
+				break;
+	
+		}
+
+
+
+	}
+	// file_creation_bonus(argv, pipex, argc);
+	// envp_path_creation(envp, pipex);
+	// pipes = pipes_creation(pipes_nb, pipex);
+	// pipex_process(pipex, process_nb, argv, pipes);
+	// close_pipes(pipex, pipes_nb, pipes);
+	// pipex->i = -1;
+	// while (++pipex->i < process_nb)
+	// 	wait(NULL);
+	// free_pipes(pipes, pipex, pipes_nb);
+	// free_pipex(pipex);
 	return (0);
 }

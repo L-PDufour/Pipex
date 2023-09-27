@@ -19,37 +19,7 @@ char	*ft_free(char **str)
 	return (NULL);
 }
 
-char	*ft_strchr(const char *str, int c)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	if (c == '\0')
-		return ((char *)&str[ft_strlen(str)]);
-	while (str[i] != '\0')
-	{
-		if (str[i] == (char)c)
-			return ((char *)&str[i]);
-		i++;
-	}
-	return (0);
-}
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	if (!str)
-		return (0);
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin_gnl(char *s1, char *s2)
 {
 	char	*str;
 	int		i;
@@ -75,3 +45,4 @@ char	*ft_strjoin(char *s1, char *s2)
 	free(s1);
 	return (str);
 }
+

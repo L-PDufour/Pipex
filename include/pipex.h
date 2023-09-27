@@ -37,6 +37,7 @@ typedef struct s_Pipex
 	int		pids_bonus[];
 }			t_pipex;
 
+char	*get_next_line(int fd); // Provide the correct function signature
 void		file_creation_bonus(char **argv, t_pipex *pipex, int argc);
 void		free_pipes(int **pipes, t_pipex *pipex, int pipes_nb);
 void		close_pipes(t_pipex *pipex, int pipes_nb, int **pipes);

@@ -54,7 +54,7 @@ char	*fill_stash(char *stash, int fd)
 		if (read_bytes > 0)
 		{
 			buffer[read_bytes] = 0;
-			stash = ft_strjoin(stash, buffer);
+			stash = ft_strjoin_gnl(stash, buffer);
 		}
 	}
 	free(buffer);
