@@ -45,8 +45,9 @@ SRC = ft_atoi.c \
 	ft_substr.c \
 	ft_tolower.c \
 	ft_toupper.c \
-	get_next_line/get_next_line.c \
+	get_next_line/get_next_line_bonus.c \
 	get_next_line/get_next_line_utils.c \
+	get_next_line/get_next_line_utils_bonus.c \
 
 SRC_BONUS = ft_lstnew.c \
 	ft_lstadd_back.c \
@@ -60,8 +61,9 @@ SRC_BONUS = ft_lstnew.c \
 
 OBJ = $(SRC:.c=.o)
 
-GNL_OBJS = $(GNL)get_next_line.o \
+GNL_OBJS = $(GNL)get_next_line_bonus.o \
 	$(GNL)get_next_line_utils.o \
+	$(GNL)get_next_line_utils_bonus.o \
 
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
 

@@ -79,8 +79,8 @@ int	main(int argc, char *argv[], char **envp)
 	pipes_nb = process_nb - 1;
 	pipex = NULL;
 	pipex = init_struct();
-	if (argc < 5)
-		exit_pipex(-1, "Invalid arguments", pipex);
+	// if (argc < 5)
+		// exit_pipex(-1, "Invalid arguments", pipex);
 	file_creation_bonus(argv, pipex, argc);
 	envp_path_creation(envp, pipex);
 	pipes = pipes_creation(pipes_nb, pipex);
