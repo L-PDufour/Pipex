@@ -52,7 +52,6 @@ int	**pipes_creation(int pipes_nb, t_pipex *pipex)
 	while (++pipex->i < pipes_nb)
 		pipe(pipes[pipex->i]);
 	return (pipes);
-	free(pipes);
 }
 
 void	free_pipes(int **pipes, t_pipex *pipex, int pipes_nb)
@@ -62,4 +61,17 @@ void	free_pipes(int **pipes, t_pipex *pipex, int pipes_nb)
 	while (++pipex->i < pipes_nb)
 		free(pipes[pipex->i]);
 	free(pipes);
+}
+
+void	wait_process(t_pipex *pipex, int process_nb)
+{
+	int	i;
+	int	status;
+
+	i = -1;
+	while (++i < process_nb)
+	{
+		exit_pipex(waitpid(pipex->pids_bonus[i], &status, 0), "waitpid failed", pipex);
+	}
+	free(pipex->pids_bonus);
 }

@@ -34,7 +34,7 @@ typedef struct s_Pipex
 	int		pids2;
 	int		i;
 	int		j;
-	int		pids_bonus[];
+	int		*pids_bonus;
 }			t_pipex;
 
 void		file_creation_bonus(char **argv, t_pipex *pipex, int argc);
@@ -50,5 +50,6 @@ void		envp_path_creation(char **envp, t_pipex *pipex);
 void		exit_pipex(int number, char *str, t_pipex *pipex);
 int			path_verification(t_pipex *pipex);
 int			**pipes_creation(int pipes_nb, t_pipex *pipex);
+void		wait_process(t_pipex *pipex, int process_nb);
 
 #endif

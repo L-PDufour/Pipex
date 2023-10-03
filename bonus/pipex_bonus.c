@@ -56,9 +56,13 @@ void	pipex_process(t_pipex *pipex, int process_nb, char **argv, int **pipes)
 
 	pipes_nb = process_nb - 1;
 	pipex->i = -1;
+	pipex->pids_bonus = (pid_t *)malloc(process_nb * sizeof(pid_t));
+	if (!pipex->pids_bonus)
+		exit_pipex(-1, "Failed to allocate memory for child process", pipex);
 	while (++pipex->i < process_nb)
 	{
 		pipex->pids_bonus[pipex->i] = fork();
+		exit_pipex(pipex->pids_bonus[pipex->i], "fork failed", pipex);
 		if (pipex->pids_bonus[pipex->i] == 0 && pipex->i == 0)
 			child_process_1_bonus(argv, pipex, pipes, pipes_nb);
 		else if (pipex->pids_bonus[pipex->i] == 0 && pipex->i == process_nb - 1)
@@ -66,6 +70,7 @@ void	pipex_process(t_pipex *pipex, int process_nb, char **argv, int **pipes)
 		else if (pipex->pids_bonus[pipex->i] == 0)
 			child_process_x_bonus(argv, pipex, pipes, pipes_nb);
 	}
+	wait_process(pipex, process_nb);
 }
 
 int	main(int argc, char *argv[], char **envp)
@@ -79,16 +84,13 @@ int	main(int argc, char *argv[], char **envp)
 	pipes_nb = process_nb - 1;
 	pipex = NULL;
 	pipex = init_struct();
-	// if (argc < 5)
-		// exit_pipex(-1, "Invalid arguments", pipex);
+	if (argc < 5)
+		exit_pipex(-1, "Invalid arguments", pipex);
 	file_creation_bonus(argv, pipex, argc);
 	envp_path_creation(envp, pipex);
 	pipes = pipes_creation(pipes_nb, pipex);
 	pipex_process(pipex, process_nb, argv, pipes);
 	close_pipes(pipex, pipes_nb, pipes);
-	pipex->i = -1;
-	while (++pipex->i < process_nb)
-		wait(NULL);
 	free_pipes(pipes, pipex, pipes_nb);
 	free_pipex(pipex);
 	return (0);

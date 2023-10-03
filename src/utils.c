@@ -26,25 +26,20 @@ t_pipex	*init_struct(void)
 {
 	static t_pipex	*pipex;
 
+	pipex = NULL;
 	if (!pipex)
 	{
 		pipex = malloc(sizeof(*pipex));
 		if (!pipex)
-			exit_pipex(-1, "Malloc failure", pipex);
-		pipex->env_path = NULL;
-		pipex->cmd_path = NULL;
-		pipex->cmd_args = NULL;
-		pipex->infile = 0;
-		pipex->outfile = 0;
-		pipex->fd[0] = 0;
-		pipex->fd[1] = 0;
-		pipex->pids1 = 0;
-		pipex->pids2 = 0;
-		pipex->i = -1;
-		pipex->j = -1;
+		{
+			fprintf(stderr, "Malloc failure\n");
+			exit(EXIT_FAILURE);
+		}
+		ft_bzero(pipex, sizeof(*pipex));
 	}
 	return (pipex);
 }
+
 /**
  * Free allocated resources and deallocate the t_pipex struct.
  *
@@ -151,20 +146,25 @@ void	envp_path_creation(char **envp, t_pipex *pipex)
 {
 	char	*str;
 	int		i;
+	char	*temp;
 
-	i = 0;
 	str = NULL;
 	while (*envp)
 	{
 		if (ft_strncmp(*envp, "PATH", 4) == 0)
 		{
-			str = ft_substr(*envp, 5, (ft_strlen(*envp)));
+			str = ft_substr(*envp, 5, ft_strlen(*envp));
 			pipex->env_path = ft_split(str, ':');
 			free(str);
-			while (pipex->env_path[i] != NULL)
+			i = -1;
+			while (pipex->env_path[++i] != NULL)
 			{
-				ft_strcat(pipex->env_path[i], "/");
-				i++;
+				temp = ft_strjoin(pipex->env_path[i], "/");
+				if (temp)
+				{
+					free(pipex->env_path[i]);
+					pipex->env_path[i] = temp;
+				}
 			}
 		}
 		envp++;

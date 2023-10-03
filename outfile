@@ -4,11 +4,14 @@ bonus
 include
 infile
 libft
+ls
+out
 outfile
 outfile0
 outfile1
 outfile2
 outfile3
+output
 output0
 output1
 output2
@@ -18,4 +21,5 @@ pipex.dSYM
 pipex_bonus
 pipex_bonus.dSYM
 script.sh
+sleep 3
 src
