@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
-SRCS = get_next_line.c \
+SRCS = get_next_line_bonus.c \
+       get_next_line_utils_bonus.c \
        get_next_line_utils.c
 BONUS_SRCS = $(shell find . -iname "*_bonus.c")
 OBJS = $(SRCS:.c=.o)
