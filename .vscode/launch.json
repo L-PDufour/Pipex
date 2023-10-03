@@ -17,7 +17,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/Users/ldufour/Documents/Pipex/pipex_bonus",
-            "args": ["infile", "sleep 1", "sleep 2", "sleep 3", "output"],
+            "args": ["infile", "las", "ls", "output"],
             "stopAtEntry": false,
             "initCommands": [
                 "settings set target.process.follow-fork-mode child"],

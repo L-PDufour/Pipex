@@ -29,13 +29,16 @@ t_pipex	*init_struct(void)
 	pipex = NULL;
 	if (!pipex)
 	{
-		pipex = malloc(sizeof(*pipex));
+		pipex = (t_pipex *)ft_calloc(1, sizeof(t_pipex));
 		if (!pipex)
 		{
 			fprintf(stderr, "Malloc failure\n");
 			exit(EXIT_FAILURE);
 		}
 		ft_bzero(pipex, sizeof(*pipex));
+		pipex->cmd_args = NULL;
+		pipex->env_path = NULL;
+		pipex->cmd_path = NULL;
 	}
 	return (pipex);
 }
