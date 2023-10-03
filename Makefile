@@ -6,7 +6,7 @@
 #    By: ldufour <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/19 13:31:48 by ldufour           #+#    #+#              #
-#    Updated: 2023/09/19 13:32:20 by ldufour          ###   ########.fr        #
+#    Updated: 2023/10/02 20:15:17 by ldufour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,22 +30,22 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 $(NAME): $(OBJ)
-		cd libft && make
-		$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
+		@cd libft && make all
+		@$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
 
 bonus:	$(OBJB)
-		cd libft && make
-		$(CC) $(CFLAGS) $(SRCB) $(LIBFT) -o $(NAMEB)
+		@cd libft && make all
+		@$(CC) $(CFLAGS) $(SRCB) $(LIBFT) -o $(NAMEB)
 
 all:	$(NAME)
 
 clean:	
-		cd libft && make clean
-		rm -f $(OBJ) $(OBJB)
+		@cd libft && make clean
+		@rm -f $(OBJ) $(OBJB)
 
 fclean:	clean
-		cd libft && make fclean
-		rm -f $(NAME) $(NAMEB)
+		@cd libft && make fclean
+		@rm -f $(NAME) $(NAMEB)
 
 re:		fclean all
 
