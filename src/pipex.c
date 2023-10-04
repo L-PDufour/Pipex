@@ -6,11 +6,27 @@
 /*   By: ldufour <ldufour@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 15:25:29 by ldufour           #+#    #+#             */
-/*   Updated: 2023/09/20 11:23:57 by ldufour          ###   ########.fr       */
+/*   Updated: 2023/10/04 13:40:30 by ldufour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+char	**parsing_arguments(char *argv)
+{
+	char	**argument;
+	int		i;
+
+	i = -1;
+	argument = NULL;
+	while (argv[++i] != '\0')
+	{
+		if (argv[i] != 32 && ft_iswhitespace(argv[i]) == 1)
+			argv[i] = ' ';
+	}
+	argument = ft_split(argv, ' ');
+	return (argument);
+}
 
 /*
  * Execute the first child process in the pipex program.
@@ -24,6 +40,7 @@
  * @param pipex  A pointer to the t_pipex struct containing configuration
  * details.
  */
+// "grep	line" "		wc -l	"
 
 void	child_process_1(char **argv, char **envp, t_pipex *pipex)
 {
@@ -31,7 +48,7 @@ void	child_process_1(char **argv, char **envp, t_pipex *pipex)
 	exit_pipex(dup2(pipex->fd[1], STDOUT_FILENO), "dup2 error", pipex);
 	close(pipex->fd[0]);
 	close(pipex->infile);
-	pipex->cmd_args = ft_split(argv[2], ' ');
+	pipex->cmd_args = parsing_arguments(argv[2]);
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, envp);
 	exit_pipex(-1, "Can't execute child process 1", pipex);
@@ -59,16 +76,14 @@ void	child_process_2(char **argv, char **envp, t_pipex *pipex)
 	exit_pipex(dup2(pipex->fd[0], STDIN_FILENO), "du2 error", pipex);
 	close(pipex->fd[1]);
 	close(pipex->outfile);
-	pipex->cmd_args = ft_split(argv[3], ' ');
+	pipex->cmd_args = parsing_arguments(argv[3]);
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, envp);
 	exit_pipex(-1, "Can't execute child process 2", pipex);
 }
 
-/*
- * Create and set file descriptors for input and output files.
- *
- * This function takes the input and output file paths from the `argv` array
+/* Create and set file descriptors for input and output files. This function 
+ * takes the input and output file paths from the `argv` array
  * and opens the files, setting up the corresponding file descriptors in the
  * `t_pipex` struct for later use in the pipex program.
  *

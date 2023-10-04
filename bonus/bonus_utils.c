@@ -63,15 +63,18 @@ void	free_pipes(int **pipes, t_pipex *pipex, int pipes_nb)
 	free(pipes);
 }
 
-void	wait_process(t_pipex *pipex, int process_nb)
+char	**parsing_arguments(char *argv)
 {
-	int	i;
-	int	status;
+	char	**argument;
+	int		i;
 
 	i = -1;
-	while (++i < process_nb)
+	argument = NULL;
+	while (argv[++i] != '\0')
 	{
-		exit_pipex(waitpid(pipex->pids_bonus[i], &status, 0), "waitpid", pipex);
+		if (argv[i] != 32 && ft_iswhitespace(argv[i]) == 1)
+			argv[i] = ' ';
 	}
-	free(pipex->pids_bonus);
+	argument = ft_split(argv, ' ');
+	return (argument);
 }

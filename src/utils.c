@@ -73,6 +73,8 @@ void	free_pipex(t_pipex *pipex)
 			free(pipex->cmd_args[i]);
 		free(pipex->cmd_args);
 	}
+	if (pipex->pids_bonus != NULL)
+		free(pipex->pids_bonus);
 	free(pipex);
 }
 

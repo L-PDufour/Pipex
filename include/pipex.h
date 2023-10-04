@@ -21,6 +21,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 typedef struct s_Pipex
 {
@@ -51,5 +52,5 @@ void		exit_pipex(int number, char *str, t_pipex *pipex);
 int			path_verification(t_pipex *pipex);
 int			**pipes_creation(int pipes_nb, t_pipex *pipex);
 void		wait_process(t_pipex *pipex, int process_nb);
-
+char		**parsing_arguments(char *argv);
 #endif

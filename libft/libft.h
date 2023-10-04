@@ -13,6 +13,7 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
 
@@ -30,8 +31,8 @@ int					ft_isascii(int c);
 int					ft_isdigit(int c);
 int					ft_isprint(int c);
 char				*ft_itoa(int n);
-void				ft_lstadd_back(t_list **alst, t_list *new);
-void				ft_lstadd_front(t_list **alst, t_list *new);
+// void				ft_lstadd_back(t_list **alst, t_list *new);
+// void				ft_lstadd_front(t_list **alst, t_list *new);
 void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
@@ -67,5 +68,6 @@ char				*ft_strtrim(char const *s1, char const *set);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
+bool				ft_iswhitespace(int c);
 
 #endif

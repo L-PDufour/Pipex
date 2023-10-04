@@ -19,7 +19,7 @@ static void	child_process_1_bonus(char **argv, t_pipex *pipex, int **pipes,
 	exit_pipex(dup2(pipes[0][1], STDOUT_FILENO), "dup2 error", pipex);
 	close_pipes(pipex, process_nb, pipes);
 	close(pipex->infile);
-	pipex->cmd_args = ft_split(argv[2], ' ');
+	pipex->cmd_args = parsing_arguments(argv[2]);
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, NULL);
 	exit_pipex(-1, "Can't execute child process 1", pipex);
@@ -32,7 +32,7 @@ static void	child_process_2_bonus(char **argv, t_pipex *pipex, int **pipes,
 	exit_pipex(dup2(pipes[pipes_nb - 1][0], STDIN_FILENO), "dup2 error", pipex);
 	close_pipes(pipex, pipes_nb, pipes);
 	close(pipex->outfile);
-	pipex->cmd_args = ft_split(argv[pipes_nb + 2], ' ');
+	pipex->cmd_args = parsing_arguments(argv[pipes_nb + 2]);
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, NULL);
 	exit_pipex(-1, "Can't execute child process 2", pipex);
@@ -44,7 +44,7 @@ static void	child_process_x_bonus(char **argv, t_pipex *pipex, int **pipes,
 	exit_pipex(dup2(pipes[pipex->i - 1][0], STDIN_FILENO), "dup2 error", pipex);
 	exit_pipex(dup2(pipes[pipex->i][1], STDOUT_FILENO), "du2p error", pipex);
 	close_pipes(pipex, pipes_nb, pipes);
-	pipex->cmd_args = ft_split(argv[pipex->i + 2], ' ');
+	pipex->cmd_args = parsing_arguments(argv[pipex->i + 2]);
 	path_verification(pipex);
 	execve(pipex->cmd_path, pipex->cmd_args, NULL);
 	exit_pipex(-1, "Can't execute child process 2", pipex);
@@ -70,7 +70,6 @@ void	pipex_process(t_pipex *pipex, int process_nb, char **argv, int **pipes)
 		else if (pipex->pids_bonus[pipex->i] == 0)
 			child_process_x_bonus(argv, pipex, pipes, pipes_nb);
 	}
-	wait_process(pipex, process_nb);
 }
 
 int	main(int argc, char *argv[], char **envp)
@@ -91,6 +90,9 @@ int	main(int argc, char *argv[], char **envp)
 	pipes = pipes_creation(pipes_nb, pipex);
 	pipex_process(pipex, process_nb, argv, pipes);
 	close_pipes(pipex, pipes_nb, pipes);
+	pipex->i = -1;
+	while (++pipex->i < process_nb)
+		wait(NULL);
 	free_pipes(pipes, pipex, pipes_nb);
 	free_pipex(pipex);
 	return (0);
