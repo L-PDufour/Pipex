@@ -6,7 +6,7 @@
 #    By: ldufour <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/19 13:31:48 by ldufour           #+#    #+#              #
-#    Updated: 2023/10/02 20:15:17 by ldufour          ###   ########.fr        #
+#    Updated: 2023/11/13 08:46:29 by ldufour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ OBJB = $(SRCB:c=o)
 LIBFT =	libft/libft.a
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 $(NAME): $(OBJ)
 		@cd libft && make all
